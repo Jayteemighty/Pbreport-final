@@ -67,6 +67,8 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'django_otp',
     'django_otp.plugins.otp_totp',
+     "rest_framework_simplejwt.token_blacklist",
+    "django_countries",
 ]
 
 MIDDLEWARE = [
