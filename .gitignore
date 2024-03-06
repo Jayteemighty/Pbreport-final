@@ -1,5 +1,5 @@
 .env
-
+.env.dev
 accounts/__pycache__
 orders/__pycache__
 products/__pycache__
