@@ -55,7 +55,7 @@ class User(SoftDeleteBaseModel, AbstractUser, TimeAndUUIDStampedBaseModel):
     )
     job_title = models.CharField(_("job_title"), max_length=100, null=True, blank=True)
     company = models.CharField(_("company"), max_length=100, null=True, blank=True)
-    website = models.URLField(_("website"), max_length=100, null=True, blank=True)
+    #website = models.URLField(_("website"), max_length=100, null=True, blank=True)
     #blog = models.URLField(_("blog"), max_length=100, null=True, blank=True)
     country = CountryField(_("country"), null=True, blank=True, default="GB")
     postal_code = models.IntegerField(_("postal_code"), null=True, blank=True)
