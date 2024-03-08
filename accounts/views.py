@@ -142,5 +142,5 @@ class RequestPasswordResetView(APIView):
         )
 
 
-class ResetPasswordView(APIView):
+class ResetPasswordView(APIView):#not decided
     pass
