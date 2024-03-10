@@ -4,7 +4,7 @@
 
 This project contains APIs for an Ecommerce website. It includes logic(django apps) such as Accounts, Order, Product. while the django project named backend contains configuration of settings and urls.
 
-BASE_URL = https://e-commerce-final-fe1r.onrender.com/ or http://127.0.0.1:8000/ depending on whether you are using the deployed api or you cloned the repository
+BASE_URL = http://127.0.0.1:8000/
 
 ## Authentication Endpoints
 
