@@ -38,8 +38,8 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-    #def get_absolute_url(self):
-    #    return f'/{self.category.slug}/{self.slug}/'
+    def get_absolute_url(self):
+        return f'/{self.category.slug}/{self.slug}/'
     
     def get_image(self):
         if self.image:
@@ -73,3 +73,7 @@ class Product(models.Model):
 class PDFDocument(models.Model):
     name = models.CharField(max_length=255)
     pdf_file = models.FileField(upload_to='pdf_files/')
+    #filedata = models.FileField(storage=PrivateMediaStorage())
+    filename = models.CharField(('documents name'), max_length=64)
+    created = models.DateTimeField(auto_now_add=True)
+    #filetype = models.ForeignKey(Doctype, on_delete=models.CASCADE, blank=True)
