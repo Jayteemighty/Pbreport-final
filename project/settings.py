@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-from decouple import config
 from datetime import timedelta
 import psycopg2
+from decouple import config
 import environ
 from celery import schedules
 

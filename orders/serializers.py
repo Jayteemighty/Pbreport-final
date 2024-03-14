@@ -30,7 +30,9 @@ class MyOrderSerializer(serializers.ModelSerializer):
             "place",
             "phone",
             "items",
-            "paid_amount"
+            "paid_amount",
+            "paystack_reference"
+            "payment_verified"
         )
 
 class OrderItemSerializer(serializers.ModelSerializer):    
