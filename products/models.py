@@ -26,11 +26,11 @@ class Product(models.Model):
     image = models.ImageField(upload_to='uploads/', blank=True, null=True)
     thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
-    location = models.CharField(max_length=255)
-    report_code = models.CharField(max_length=100000)
-    report_overview = models.CharField(max_length=100000)
-    objective = models.CharField(max_length=100000)
-    methodology = models.CharField(max_length=100000)
+    location = models.CharField(max_length=255, default='Your default location')
+    report_code = models.CharField(max_length=100000, default='Your default report code')
+    report_overview = models.CharField(max_length=100000, default='Your default report overview')
+    objective = models.CharField(max_length=100000, default='Your default objective')
+    methodology = models.CharField(max_length=100000, default='Your default methodology')
 
     class Meta:
         ordering = ('-date_added',)
