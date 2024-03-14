@@ -8,7 +8,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'category',
-            'title',
+            'name',
             'slug',
             'description',
             'price',
@@ -30,7 +30,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = (
             "id",
-            "title",
+            "name",
             "get_absolute_url",
             "products",
         )

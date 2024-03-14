@@ -69,3 +69,7 @@ class Product(models.Model):
         thumbnail = File(thumb_io, name=image.title)
 
         return thumbnail
+    
+class PDFDocument(models.Model):
+    title = models.CharField(max_length=255)
+    pdf_file = models.FileField(upload_to='pdf_files/')
