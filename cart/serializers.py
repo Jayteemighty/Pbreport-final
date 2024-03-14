@@ -1,48 +1,63 @@
-from rest_framework import generics, status
-from rest_framework.response import Response
+from rest_framework import serializers
 from .models import Cart, CartItem
-from .serializers import AddToCartSerializer, UpdateCartSerializer, CartSerializer
-from rest_framework.permissions import IsAuthenticated
+from products.serializers import ProductSerializer
+from django.core.validators import MinValueValidator
 
+class AddToCartSerializer(serializers.ModelSerializer):
+    quantity = serializers.IntegerField(validators=[MinValueValidator(1)] ,default =1)
 
-class AddToCartView(generics.CreateAPIView):
-    serializer_class = AddToCartSerializer
-    permission_classes = [IsAuthenticated]
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(user=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    class Meta:
+        model = CartItem
+        fields = ['id','product', 'quantity', 'date_added']
 
-class UpdateCartView(generics.UpdateAPIView):
-    serializer_class = UpdateCartSerializer
-    queryset = CartItem.objects.all()
-    permission_classes = [IsAuthenticated]
+    def create(self, validated_data):
+        product = validated_data['product']
+        quantity = validated_data['quantity']
+        user = validated_data.get('user')
+        
+        cart, created = Cart.objects.get_or_create(user=user)
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
 
+        if not created:
+            cart_item.quantity += quantity
+        else:
+            cart_item.quantity = quantity
 
-    def put(self, request, pk, *args, **kwargs):
-        action = request.data.get('action')
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(action=action)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        cart_item.save()
+        return cart_item
 
-class CartView(generics.RetrieveAPIView):
-    serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated]
-
-    queryset = Cart.objects.all()
-    lookup_field = 'user'
+class UpdateCartSerializer(serializers.ModelSerializer):
     
+    class Meta:
+        model = CartItem
+        fields = ['product', 'quantity', 'date_added']
     
-class DeleteCartItemView(generics.DestroyAPIView):
-    serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated]
+    def update(self, instance, validated_data):
+        action = validated_data.get('action')
+        if action not in ('INCREASE', 'DECREASE'):
+            raise serializers.ValidationError({'error': "Action can only be 'INCREASE' or 'DECREASE'"})
+        
+        if action == 'INCREASE':
+            instance.quantity += 1
+        elif action == 'DECREASE' and instance.quantity > 0:
+            instance.quantity -= 1
+        instance.save()
+        
+        if instance.quantity == 0:
+            instance.delete()
 
-    queryset = CartItem.objects.all()
+        return instance
+    
+class CartItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    class Meta:
+        model = CartItem
+        fields = "__all__"
 
-    def delete(self, request, pk, *args, **kwargs):
-        instance = self.get_object()
-        instance.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+class CartSerializer(serializers.ModelSerializer):
+    cart_items = CartItemSerializer(many=True, read_only=True)
+    class Meta:
+        model = Cart
+        fields = ['id','cart_items']
+        
+    
