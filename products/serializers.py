@@ -6,13 +6,21 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = (
-            "id",
-            "name",
+            'id',
+            'category',
+            'title',
+            'slug',
+            'description',
+            'price',
+            'date_added',
+            'location',
+            'report_code',
+            'report_overview',
+            'objective',
+            'methodology',
             "get_absolute_url",
-            "description",
-            "price",
             "get_image",
-            "get_thumbnail"
+            "get_thumbnail",
         )
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -22,7 +30,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = (
             "id",
-            "name",
+            "title",
             "get_absolute_url",
             "products",
         )

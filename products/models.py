@@ -5,33 +5,38 @@ from django.core.files import File
 from django.db import models
 
 class Category(models.Model):
-    name = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
     slug = models.SlugField()
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('title',)
     
     def __str__(self):
-        return self.name
+        return self.title
     
     def get_absolute_url(self):
         return f'/{self.slug}/'
 
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
     slug = models.SlugField()
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     image = models.ImageField(upload_to='uploads/', blank=True, null=True)
     thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    location = models.CharField(max_length=255)
+    report_code = models.CharField(max_length=100000)
+    report_overview = models.CharField(max_length=100000)
+    objective = models.CharField(max_length=100000)
+    methodology = models.CharField(max_length=100000)
 
     class Meta:
         ordering = ('-date_added',)
     
     def __str__(self):
-        return self.name
+        return self.title
     
     #def get_absolute_url(self):
     #    return f'/{self.category.slug}/{self.slug}/'
@@ -61,6 +66,6 @@ class Product(models.Model):
         thumb_io = BytesIO()
         img.save(thumb_io, 'JPEG', quality=85)
 
-        thumbnail = File(thumb_io, name=image.name)
+        thumbnail = File(thumb_io, name=image.title)
 
         return thumbnail
