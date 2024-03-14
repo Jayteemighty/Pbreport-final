@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 from datetime import timedelta
 import psycopg2
-from decouple import config
+#from decouple import config
 import environ
 from celery import schedules
 
@@ -115,15 +115,26 @@ WSGI_APPLICATION = "project.wsgi.application"
 #    }
 #}
 
+#DATABASES = {
+#    "default": {
+#        "ENGINE": "django.db.backends.postgresql_psycopg2",
+#        "NAME": config("DB_NAME"),
+#        "USER": config("DB_USER"),
+#        "PASSWORD": config("DB_PASSWORD"),
+#        "HOST": config("DB_HOST"),
+#        "PORT": config("DB_PORT"),
+#        "CONN_MAX_AGE": 600,
+#    }
+#}
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
-        "HOST": config("DB_HOST"),
-        "PORT": config("DB_PORT"),
-        "CONN_MAX_AGE": 600,
+        "NAME": os.environ.get("POSTGRES_DB", "postgres"),
+        "USER": os.environ.get("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
 }
 
@@ -239,8 +250,8 @@ SPECTACULAR_SETTINGS = {
     }
 
 # Celery settings
-CELERY_BROKER_URL = config("CELERY_BROKER_URL")
-CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND")
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
@@ -253,8 +264,7 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-
-PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
-PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
+PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY')
+PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY')
 PAYSTACK_INITIALIZE_PAYMENT_URL = "https://api.paystack.co/transaction/initialize"
 #PAYSTACK_VERIFY_TRANSACTION_URL = "https://api.paystack.co/transaction/verify/"
