@@ -71,9 +71,9 @@ class Product(models.Model):
         return thumbnail
     
 class PDFDocument(models.Model):
-    name = models.CharField(max_length=255)
-    pdf_file = models.FileField(upload_to='pdf_files/')
+    name = models.CharField(max_length=255, blank=True, null=True)  # Allow optional and empty name
+    pdf_file = models.FileField(upload_to='pdf_files/', blank=True, null=True)  # Allow absent file
+    filename = models.CharField(max_length=64, default="pdffile")  # Default filename
+    created = models.DateTimeField(blank=True, null=True)  # Already has a default value
     #filedata = models.FileField(storage=PrivateMediaStorage())
-    filename = models.CharField(('documents name'), max_length=64)
-    created = models.DateTimeField(auto_now_add=True)
     #filetype = models.ForeignKey(Doctype, on_delete=models.CASCADE, blank=True)
